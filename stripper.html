@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RAGEBAIT ROLLING</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+    body {
+      font-family: 'Orbitron', Arial, sans-serif;
+      background-color: #0a0a0a;
+      color: #eee;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .container {
+      background-color: #121212;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 30px 5px #4400ff88;
+      max-width: 900px;
+      width: 100%;
+      display: flex;
+      gap: 40px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: nowrap;
+    }
+
+    .title-box {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* Updated link style */
+    a {
+      text-decoration: none;
+      color: inherit; /* Make the link inherit color from its parent */
+      cursor: pointer;
+    }
+
+    a:hover h1, a:hover h2 {
+      text-decoration: underline;
+      color: #ff00ff; /* Subtle color change on hover */
+    }
+
+    h1, h2 {
+      margin: 0;
+      background: linear-gradient(270deg, 
+        #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff, #ff0000);
+      background-size: 1600% 1600%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 12s ease infinite;
+      user-select: none;
+      text-align: left;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+    }
+
+    h2 {
+      font-size: 1.6rem;
+      font-weight: 500;
+      font-style: italic;
+      letter-spacing: 0.12em;
+    }
+
+    @keyframes rainbow {
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+    }
+
+    textarea, button, .output-box {
+      background-color: #1e1e1e;
+      color: #ddd;
+      border: 1px solid #333;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: 'Courier New', Courier, monospace;
+      box-shadow: inset 0 0 10px #000;
+      transition: border-color 0.3s ease;
+    }
+
+    textarea {
+      flex: 1;
+      min-height: 150px;
+      padding: 15px;
+      resize: vertical;
+      outline: none;
+      min-width: 320px;
+      max-width: 100%;
+    }
+
+    textarea:focus {
+      border-color: #6a00ff;
+      box-shadow: 0 0 8px #6a00ff;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 15px;
+      width: 100%;
+      background: linear-gradient(90deg, #6a00ff, #4400ff);
+      color: #eee;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      user-select: none;
+    }
+
+    button:hover {
+      background: linear-gradient(90deg, #4400ff, #6a00ff);
+      box-shadow: 0 0 12px #6a00ff;
+    }
+
+    .output-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 320px;
+      max-width: 100%;
+    }
+
+    .output-box {
+      height: 150px; /* fixed height to avoid stretching */
+      padding: 15px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      overflow-y: auto;
+      border-color: #4400ff;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      resize: none;
+      user-select: text;
+    }
+
+    /* Copy button inside output section */
+    .copy-button {
+      padding: 10px;
+      background: linear-gradient(90deg, #6a00ff, #4400ff);
+      color: #eee;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      user-select: none;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      align-self: flex-end;
+      width: 140px;
+    }
+
+    .copy-button:hover {
+      background: linear-gradient(90deg, #4400ff, #6a00ff);
+      box-shadow: 0 0 12px #6a00ff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="title-box">
+      <!-- Updated link to new YouTube video -->
+      <a href="https://youtu.be/ZK1pNGmNBEc" target="_blank">
+        <h1>RAGEBAIT ROLLING</h1>
+        <h2>character stripper</h2>
+      </a>
+    </div>
+
+    <div class="input-section" style="flex:1; display:flex; flex-direction: column; gap: 10px; min-width: 320px; max-width: 100%;">
+      <textarea id="inputText" placeholder="Paste your text here..."></textarea>
+      <button onclick="processText()">Format Text</button>
+
+      <div class="output-section">
+        <div class="output-box" id="outputText" aria-live="polite"></div>
+        <button class="copy-button" onclick="copyOutput()">Copy to Clipboard</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function processText() {
+      let inputText = document.getElementById("inputText").value;
+
+      // Remove markdown characters: # * _ ~ > ` 
+      let noMarkdown = inputText.replace(/[#*_\~>`]/g, '');
+
+      // Remove unwanted characters:
+      // spaces, commas, periods, apostrophes (straight & curly), quotes (straight & curly),
+      // parentheses, square brackets, dashes (normal & em dash), semicolons, colons, line breaks
+      let cleaned = noMarkdown.replace(/[ ,.'’‘“”"()[\]—\-\r\n\t;:]/g, '');
+
+      // Convert to lowercase
+      let formattedText = cleaned.toLowerCase();
+
+      // Show the output
+      document.getElementById("outputText").textContent = formattedText;
+    }
+
+    function copyOutput() {
+      const output = document.getElementById("outputText").textContent;
+      if (!output) return;
+
+      navigator.clipboard.writeText(output).then(() => {
+        // Provide some feedback (optional)
+        alert("Copied to clipboard!");
+      }).catch(() => {
+        alert("Failed to copy. Please copy manually.");
+      });
+    }
+  </script>
+
+</body>
+</html>
