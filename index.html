@@ -40,16 +40,15 @@
       gap: 10px;
     }
 
-    /* Updated link style */
     a {
       text-decoration: none;
-      color: inherit; /* Make the link inherit color from its parent */
+      color: inherit;
       cursor: pointer;
     }
 
     a:hover h1, a:hover h2 {
       text-decoration: underline;
-      color: #ff00ff; /* Subtle color change on hover */
+      color: #ff00ff;
     }
 
     h1, h2 {
@@ -137,7 +136,7 @@
     }
 
     .output-box {
-      height: 150px; /* fixed height to avoid stretching */
+      height: 150px;
       padding: 15px;
       white-space: pre-wrap;
       word-wrap: break-word;
@@ -149,7 +148,6 @@
       user-select: text;
     }
 
-    /* Copy button inside output section */
     .copy-button {
       padding: 10px;
       background: linear-gradient(90deg, #6a00ff, #4400ff);
@@ -175,7 +173,6 @@
 
   <div class="container">
     <div class="title-box">
-      <!-- Updated link to new YouTube video -->
       <a href="https://youtu.be/ZK1pNGmNBEc" target="_blank">
         <h1>RAGEBAIT ROLLING</h1>
         <h2>character stripper</h2>
@@ -200,13 +197,14 @@
       // Remove markdown characters: # * _ ~ > ` 
       let noMarkdown = inputText.replace(/[#*_\~>`]/g, '');
 
-      // Remove unwanted characters:
-      // spaces, commas, periods, apostrophes (straight & curly), quotes (straight & curly),
-      // parentheses, square brackets, dashes (normal & em dash), semicolons, colons, line breaks
-      let cleaned = noMarkdown.replace(/[ ,.'’‘“”"()[\]—\-\r\n\t;:]/g, '');
+      // Remove unwanted characters, including ⸻, •, and –
+      let cleaned = noMarkdown.replace(/[ ,.'’‘“”"()[\]—⸻\-\r\n\t;:•–]/g, '');
+
+      // Remove emojis
+      let noEmojis = cleaned.replace(/\p{Emoji}/gu, '');
 
       // Convert to lowercase
-      let formattedText = cleaned.toLowerCase();
+      let formattedText = noEmojis.toLowerCase();
 
       // Show the output
       document.getElementById("outputText").textContent = formattedText;
@@ -217,7 +215,6 @@
       if (!output) return;
 
       navigator.clipboard.writeText(output).then(() => {
-        // Provide some feedback (optional)
         alert("Copied to clipboard!");
       }).catch(() => {
         alert("Failed to copy. Please copy manually.");
@@ -227,4 +224,3 @@
 
 </body>
 </html>
-
